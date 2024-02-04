@@ -1,9 +1,9 @@
-package br.com.fullcycle.hexagonal.infrastructure.controllers;
+package br.com.fullcycle.hexagonal.infrastructure.rest;
 
 import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
 import br.com.fullcycle.hexagonal.application.usecases.CreatePartnerUseCase;
 import br.com.fullcycle.hexagonal.application.usecases.GetPartnerByIDUseCase;
-import br.com.fullcycle.hexagonal.infrastructure.dtos.PartnerDTO;
+import br.com.fullcycle.hexagonal.infrastructure.dtos.NewPartnerDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,11 +24,11 @@ public class PartnerController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody PartnerDTO dto) {
+    public ResponseEntity<?> create(@RequestBody NewPartnerDTO dto) {
         try {
             final var  output =
                     createPartnerUseCase.execute(
-                            new CreatePartnerUseCase.Input(dto.getCnpj(), dto.getEmail(), dto.getName()));
+                            new CreatePartnerUseCase.Input(dto.cnpj(), dto.email(), dto.name()));
             return ResponseEntity.created(URI.create("/partners/" + output.id())).body(output);
         } catch (ValidationException ex) {
             return ResponseEntity.unprocessableEntity().body(ex.getMessage());
