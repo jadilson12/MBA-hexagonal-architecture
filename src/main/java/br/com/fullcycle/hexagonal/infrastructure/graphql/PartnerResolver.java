@@ -24,13 +24,13 @@ public class PartnerResolver {
 
     @MutationMapping
     public CreatePartnerUseCase.Output createPartner(@Argument NewCustomerDTO input) {
-        final var useCase = new CreatePartnerUseCase(partnerService);
+        final var useCase = new CreatePartnerUseCase(null);
         return useCase.execute(new CreatePartnerUseCase.Input(input.cpf(), input.email(), input.name()));
     }
 
     @QueryMapping
-    public GetPartnerByIDUseCase.Output partnerOfID(@Argument Long id) {
-        final var useCase = new GetPartnerByIDUseCase(partnerService);
+    public GetPartnerByIDUseCase.Output partnerOfID(@Argument String id) {
+        final var useCase = new GetPartnerByIDUseCase(null);
         return useCase.execute(new GetPartnerByIDUseCase.Input(id)).orElse(null);
     }
 }

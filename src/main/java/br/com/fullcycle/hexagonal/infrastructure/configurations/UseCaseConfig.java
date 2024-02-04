@@ -1,9 +1,9 @@
 package br.com.fullcycle.hexagonal.infrastructure.configurations;
 
+import br.com.fullcycle.hexagonal.application.repositories.PartnerRepository;
 import br.com.fullcycle.hexagonal.application.usecases.*;
 import br.com.fullcycle.hexagonal.infrastructure.services.CustomerService;
 import br.com.fullcycle.hexagonal.infrastructure.services.EventService;
-import br.com.fullcycle.hexagonal.infrastructure.services.PartnerService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,28 +13,30 @@ import java.util.Objects;
 public class UseCaseConfig {
 
     private final CustomerService customerService;
+    private final PartnerRepository partnerRepository;
 
-    private final PartnerService partnerService;
+
     private final EventService eventService;
 
     public UseCaseConfig(
             final CustomerService customerService,
-            final PartnerService partnerService,
+            final PartnerRepository partnerService,
             final EventService eventService
     ) {
         this.customerService = Objects.requireNonNull(customerService);
-        this.partnerService = Objects.requireNonNull(partnerService);
+        this.partnerRepository = Objects.requireNonNull(partnerService);
         this.eventService = Objects.requireNonNull(eventService);
     }
 
     @Bean
     public CreateCustomerUseCase createCustomerUseCase() {
-        return new CreateCustomerUseCase(customerService);
+        // TODO: Fix this dependency
+        return new CreateCustomerUseCase(null);
     }
 
     @Bean
     public CreateEventUseCase createEventUseCase() {
-        return new CreateEventUseCase(eventService, partnerService);
+        return new CreateEventUseCase(eventService, null);
     }
 
     @Bean
@@ -44,18 +46,19 @@ public class UseCaseConfig {
 
     @Bean
     public CreatePartnerUseCase createPartnerUseCase() {
-        return new CreatePartnerUseCase(partnerService);
+        return new CreatePartnerUseCase(partnerRepository);
     }
 
     @Bean
     public GetCustomerByIdUseCase getCustomerByIdUseCase() {
-        return new GetCustomerByIdUseCase(customerService);
+        // TODO: Fix this dependency
+        return new GetCustomerByIdUseCase(null);
 
     }
 
     @Bean
     public GetPartnerByIDUseCase getPartnerByIDUseCase() {
-        return new GetPartnerByIDUseCase(partnerService);
+        return new GetPartnerByIDUseCase(partnerRepository);
     }
 
 

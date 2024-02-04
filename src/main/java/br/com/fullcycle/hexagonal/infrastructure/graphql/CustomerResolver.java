@@ -14,11 +14,12 @@ import java.util.Objects;
 @Controller
 public class CustomerResolver {
     private final CreateCustomerUseCase createCustomerUseCase;
-    private  final GetCustomerByIdUseCase getCustomerByIdUseCase;
+    private final GetCustomerByIdUseCase getCustomerByIdUseCase;
 
     public CustomerResolver(
                             final CreateCustomerUseCase createCustomerUseCase,
-                            final GetCustomerByIdUseCase getCustomerByIdUseCase) {
+                            final GetCustomerByIdUseCase getCustomerByIdUseCase
+    ) {
         this.createCustomerUseCase = Objects.requireNonNull(createCustomerUseCase);
         this.getCustomerByIdUseCase = Objects.requireNonNull(getCustomerByIdUseCase);
 
@@ -30,7 +31,7 @@ public class CustomerResolver {
     }
 
     @QueryMapping
-    public GetCustomerByIdUseCase.Output customerOfID(@Argument Long id) {
+    public GetCustomerByIdUseCase.Output customerOfID(@Argument String id) {
         return getCustomerByIdUseCase.execute(new GetCustomerByIdUseCase.Input(id)).orElse(null);
     }
 }

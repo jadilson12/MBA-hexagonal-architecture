@@ -26,11 +26,11 @@ public class CreateCustomerUseCaseIT  extends IntegrationTest {
     void tearDown() {
         customerRepository.deleteAll();
     }
-    @DisplayName("Should create a customer")
+    @DisplayName("Deve criar um evento")
     @Test
     public void testCreateCustomer() {
         // given
-        final var expectedCPF = "12345678901";
+        final var expectedCPF = "123.456.789-01";
         final var expectedEmail = "john.doe@gmail.com";
         final var expectedName = "John Doe";
 
@@ -51,7 +51,7 @@ public class CreateCustomerUseCaseIT  extends IntegrationTest {
     @DisplayName("Não deve cadastrar um cliente com CPF duplicado")
     public void testCreateWithDuplicatedCPFShouldFail() throws Exception {
         // given
-        final var expectedCPF = "12345678901";
+        final var expectedCPF = "123.456.789-01";
         final var expectedEmail = "johon.joe@gmail.com";
         final var expectedName = "John Doe";
         final var expectedError = "Customer already exists";
@@ -73,7 +73,7 @@ public class CreateCustomerUseCaseIT  extends IntegrationTest {
     @DisplayName("Não deve cadastrar um cliente com e-mail duplicado")
     public void testCreateWithDuplicatedEmailShouldFail() throws Exception {
         // given
-        final var expectedCPF = "12345678901";
+        final var expectedCPF = "123.456.789-01";
         final var expectedEmail = "johon.joe@gmail.com";
         final var expectedName = "John Doe";
         final var expectedError = "Customer already exists";
