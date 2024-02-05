@@ -4,20 +4,20 @@ import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
 
 import java.util.UUID;
 
-public record PartnerId(String value) {
+public record EventId(String value) {
 
-    public PartnerId {
+    public EventId {
         if (value == null) {
-            throw new ValidationException("PartnerId is required");
+            throw new ValidationException("EventId is required");
         }
     }
-    public static PartnerId unique() {
-        return new PartnerId(UUID.randomUUID().toString());
+    public static EventId unique() {
+        return new EventId(UUID.randomUUID().toString());
     }
 
-    public static PartnerId with(String value) {
+    public static EventId with(String value) {
         try {
-            return new PartnerId(UUID.fromString(value).toString());
+            return new EventId(UUID.fromString(value).toString());
         } catch (IllegalArgumentException e) {
             throw new ValidationException("Invalid value for CustomerId: " + value);
         }

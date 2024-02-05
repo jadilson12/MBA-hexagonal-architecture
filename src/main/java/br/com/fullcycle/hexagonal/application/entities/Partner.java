@@ -3,7 +3,7 @@ package br.com.fullcycle.hexagonal.application.entities;
 import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
 
 public class Partner {
-    private PartnerId partnerId;
+    private final PartnerId partnerId;
     private Name name;
     private Email email;
     private Cnpj cnpj;
@@ -20,12 +20,8 @@ public class Partner {
 
     }
 
-    public PartnerId getPartnerId() {
+    public PartnerId partnerId() {
         return partnerId;
-    }
-
-    public void setPartnerId(PartnerId customerId) {
-        this.partnerId = customerId;
     }
 
     public Name name() {

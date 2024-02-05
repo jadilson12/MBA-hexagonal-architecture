@@ -27,7 +27,7 @@ public class EventResolver {
 
     @MutationMapping
     public CreateEventUseCase.Output createEvent(@Argument NewEventDTO input) {
-        return createEventUseCase.execute(new CreateEventUseCase.Input(input.date(), input.name(), input.partnerId(), input.totalSpots()));
+        return createEventUseCase.execute(new CreateEventUseCase.Input(input.date(), input.name(), input.partnerId().toString(), input.totalSpots()));
     }
 
     @Transactional

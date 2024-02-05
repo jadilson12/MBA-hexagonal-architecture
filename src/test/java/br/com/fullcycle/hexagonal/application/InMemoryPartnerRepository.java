@@ -37,7 +37,7 @@ public class InMemoryPartnerRepository implements PartnerRepository {
 
     @Override
     public Partner create(Partner partner) {
-        this.partner.put(partner.getPartnerId().toString(), partner);
+        this.partner.put(partner.partnerId().value(), partner);
         this.partnerByCnpj.put(partner.cnpj().value(), partner);
         this.partnerByEmail.put(partner.email().value(), partner);
         return partner;
@@ -45,7 +45,7 @@ public class InMemoryPartnerRepository implements PartnerRepository {
 
     @Override
     public Partner update(Partner partner) {
-        this.partner.put(partner.getPartnerId().toString(), partner);
+        this.partner.put(partner.partnerId().value(), partner);
         this.partnerByCnpj.put(partner.cnpj().value(), partner);
         this.partnerByEmail.put(partner.email().value(), partner);
         return partner;

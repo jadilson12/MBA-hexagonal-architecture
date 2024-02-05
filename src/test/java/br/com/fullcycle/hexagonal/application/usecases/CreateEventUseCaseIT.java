@@ -5,7 +5,6 @@ import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
 import br.com.fullcycle.hexagonal.infrastructure.models.Partner;
 import br.com.fullcycle.hexagonal.infrastructure.repositories.EventRepository;
 import br.com.fullcycle.hexagonal.infrastructure.repositories.PartnerRepository;
-import io.hypersistence.tsid.TSID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,11 +30,11 @@ class CreateEventUseCaseIT extends IntegrationTest {
     @DisplayName("Deve criar um evento")
     public void testCreate() throws Exception {
         // given
-        final var partner = createPartner("41536538000100", "johon.joe@gmail.com", "John Doe");
+        final var aPartner = createPartner("41536538000100", "johon.joe@gmail.com", "John Doe");
         final var expectedDate = "2021-01-01";
         final var expectedName = "Disney on Ice";
         final var expectedTotalSpots = 100;
-        final var expectedPartnerId = partner.getId();
+        final var expectedPartnerId = aPartner.getId().toString();
 
 
 
@@ -59,10 +58,11 @@ class CreateEventUseCaseIT extends IntegrationTest {
     @DisplayName("Nào deve criar um evento quando o Partner não existir")
     public void testCreateEvent_whenPartnerDoesnotsExisted_ShouldTownError() throws Exception {
         // given
+        final var aPartner = createPartner("41536538000100", "johon.joe@gmail.com", "John Doe");
         final var expectedDate = "2021-01-01";
         final var expectedName = "Disney on Ice";
         final var expectedTotalSpots = 100;
-        final var expectedPartnerId = TSID.fast().toLong();
+        final var expectedPartnerId = aPartner.getId().toString();
         final var expectedError = "Partner not found";
 
         final var createInput =

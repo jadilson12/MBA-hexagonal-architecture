@@ -33,7 +33,7 @@ public class EventController {
     @ResponseStatus(CREATED)
     public ResponseEntity<?> create(@RequestBody NewEventDTO dto) {
         try {
-            final var output =  createEventUseCase.execute(new CreateEventUseCase.Input(dto.date(), dto.name(), dto.partnerId(), dto.totalSpots()));
+            final var output =  createEventUseCase.execute(new CreateEventUseCase.Input(dto.date(), dto.name(), dto.partnerId().toString(), dto.totalSpots()));
             return  ResponseEntity.created(URI.create("/events/" + output.id())).body(output);
         } catch (ValidationException ex) {
             return ResponseEntity.unprocessableEntity().body(ex.getMessage());

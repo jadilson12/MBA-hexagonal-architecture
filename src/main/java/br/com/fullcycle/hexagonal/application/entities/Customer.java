@@ -37,9 +37,9 @@ public class Customer {
     }
 
     public  static Customer newCustomer(
+            final String name,
             final String cpf,
-            final String email,
-            final String name
+            final String email
             ) {
         return new Customer(CustomerId.unique(),cpf, email, name );
     }
