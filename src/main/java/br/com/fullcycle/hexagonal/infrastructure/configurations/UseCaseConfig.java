@@ -26,7 +26,8 @@ public class UseCaseConfig {
     public UseCaseConfig(
             final CustomerRepository customerRepository,
             final PartnerRepository partnerRepository,
-            TicketRepository ticketRepository, final EventRepository eventRepository
+            final TicketRepository ticketRepository,
+            final EventRepository eventRepository
     ) {
         this.customerRepository = Objects.requireNonNull(customerRepository);
         this.partnerRepository = Objects.requireNonNull(partnerRepository);

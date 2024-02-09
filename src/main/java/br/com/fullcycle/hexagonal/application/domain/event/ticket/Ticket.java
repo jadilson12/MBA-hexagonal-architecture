@@ -3,9 +3,9 @@ package br.com.fullcycle.hexagonal.application.domain.event.ticket;
 import br.com.fullcycle.hexagonal.application.domain.customer.CustomerId;
 import br.com.fullcycle.hexagonal.application.domain.event.EventId;
 import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
-import br.com.fullcycle.hexagonal.infrastructure.models.TicketStatus;
 
 import java.time.Instant;
+import java.util.Objects;
 
 public class Ticket {
     private final TicketId ticketId;
@@ -16,7 +16,7 @@ public class Ticket {
     private Instant reservedAt;
 
 
-    public Ticket(final TicketId ticketId, final EventId eventId, final CustomerId customerId, final TicketStatus status, final Instant paidAt, final Instant reservedAt) {
+    public Ticket(final TicketId ticketId, final CustomerId customerId, final EventId eventId,  final TicketStatus status, final Instant paidAt, final Instant reservedAt) {
         this.ticketId = ticketId;
         this.setEventId(eventId);
         this.setCustomerId(customerId);
@@ -26,7 +26,20 @@ public class Ticket {
     }
 
     public static Ticket newTicket(final CustomerId customerId, final EventId eventId ) {
-        return new Ticket(TicketId.unique(), eventId, customerId, TicketStatus.PENDING, null, Instant.now());
+        return new Ticket(TicketId.unique(),  customerId, eventId, TicketStatus.PENDING, null, Instant.now());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ticket ticket = (Ticket) o;
+        return Objects.equals(ticketId, ticket.ticketId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(ticketId);
     }
 
     public TicketId ticketId() {

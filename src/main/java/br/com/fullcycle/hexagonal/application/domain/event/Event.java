@@ -1,7 +1,6 @@
 package br.com.fullcycle.hexagonal.application.domain.event;
 
 import br.com.fullcycle.hexagonal.application.domain.customer.CustomerId;
-import br.com.fullcycle.hexagonal.application.domain.event.ticket.EventTicket;
 import br.com.fullcycle.hexagonal.application.domain.event.ticket.Ticket;
 import br.com.fullcycle.hexagonal.application.domain.partner.Partner;
 import br.com.fullcycle.hexagonal.application.domain.partner.PartnerId;
@@ -12,6 +11,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class Event {
@@ -36,6 +36,19 @@ public class Event {
         this.setDate(date);
         this.setTotalSpots(totalSpots);
         this.setPartnerId(partnerId);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Event event = (Event) o;
+        return Objects.equals(eventId, event.eventId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(eventId);
     }
 
     public static Event newEvent(final String name, final String date, final Integer totalSpots, final Partner partner) {

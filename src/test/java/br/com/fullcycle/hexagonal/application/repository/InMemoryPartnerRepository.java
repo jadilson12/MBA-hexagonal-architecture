@@ -2,6 +2,8 @@ package br.com.fullcycle.hexagonal.application.repository;
 
 import br.com.fullcycle.hexagonal.application.domain.partner.Partner;
 import br.com.fullcycle.hexagonal.application.domain.partner.PartnerId;
+import br.com.fullcycle.hexagonal.application.domain.person.Cnpj;
+import br.com.fullcycle.hexagonal.application.domain.person.Email;
 import br.com.fullcycle.hexagonal.application.repositories.PartnerRepository;
 
 import java.util.HashMap;
@@ -22,17 +24,17 @@ public class InMemoryPartnerRepository implements PartnerRepository {
 
     @Override
     public Optional<Partner> partnerOfId(PartnerId partnerId) {
-        return Optional.ofNullable(this.partner.get(Objects.requireNonNull(partnerId).value().toString()));
+        return Optional.ofNullable(this.partner.get(Objects.requireNonNull(partnerId).value()));
     }
 
     @Override
-    public Optional<Partner> partnerOfCnpj(String cnpj) {
-        return Optional.ofNullable(this.partnerByCnpj.get(cnpj));
+    public Optional<Partner> partnerOfCnpj(Cnpj cnpj) {
+        return Optional.ofNullable(this.partnerByCnpj.get(cnpj.value()));
     }
 
     @Override
-    public Optional<Partner> partnerOfEmail(String email) {
-        return Optional.ofNullable(this.partnerByEmail.get(email));
+    public Optional<Partner> partnerOfEmail(Email email) {
+        return Optional.ofNullable(this.partnerByEmail.get(email.value()));
     }
 
     @Override

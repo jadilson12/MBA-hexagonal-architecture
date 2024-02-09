@@ -9,8 +9,7 @@ import br.com.fullcycle.hexagonal.application.domain.event.Event;
 import br.com.fullcycle.hexagonal.application.domain.event.EventId;
 import br.com.fullcycle.hexagonal.application.domain.partner.Partner;
 import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
-import br.com.fullcycle.hexagonal.application.usecases.event.SubscribeCustomerToEventUseCase;
-import br.com.fullcycle.hexagonal.infrastructure.models.TicketStatus;
+import br.com.fullcycle.hexagonal.application.domain.event.ticket.TicketStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,10 +20,11 @@ class SubscribeCustomerToEventUseCaseTest {
     public void testReserveTicket() throws Exception {
         // given
         final var expectedTicketSize = 1;
-
-        final var aPartner = Partner.newPartner("41.536.538/0001-00","johon.joe@gmail.com", "John Doe");
+        final var expectedCNPJ = "41.536.538/0001-00";
+        final var aCustomer = Customer.newCustomer("Jadilson Doe","123.456.789-01", "jadilson.joe@gmail.com");
+        final var aPartner = Partner.newPartner("John Doe",expectedCNPJ, "johon.joe@gmail.com");
         final var aEvent = Event.newEvent("Disney", "2021-01-01", 10, aPartner);
-        final var aCustomer = Customer.newCustomer("123.456.789-01", "jadilson.joe@gmail.com", "Jadilson Doe");
+
         final var customerID = aCustomer.customerId().value();
         final var eventID = aEvent.eventId().value();
 
@@ -57,7 +57,7 @@ class SubscribeCustomerToEventUseCaseTest {
         // given
         final var expectedError = "Event not found";
 
-        final var aPartner = Partner.newPartner("41.536.538/0001-00","johon.joe@gmail.com", "John Doe");
+        final var aPartner = Partner.newPartner("John Doe","41.536.538/0001-00", "johon.joe@gmail.com");
         final var aEvent = Event.newEvent("Disney", "2021-01-01", 10, aPartner);
 
         final var customerID = CustomerId.unique().value();
@@ -84,7 +84,7 @@ class SubscribeCustomerToEventUseCaseTest {
     public void testReserveTicketWithoutCustomer() throws Exception {
         // given
         final var expectedError = "Customer not found";
-        final var aCustomer = Customer.newCustomer("123.456.789-01", "jadilson.joe@gmail.com", "Jadilson Doe");
+        final var aCustomer = Customer.newCustomer("Jadilson Doe","123.456.789-01", "jadilson.joe@gmail.com");
         final var customerID = aCustomer.customerId().value();
         final var eventID = EventId.unique().value();
 
@@ -110,9 +110,9 @@ class SubscribeCustomerToEventUseCaseTest {
         // given
         final var expectedError = "Email already registered";
 
-        final var aPartner = Partner.newPartner("41.536.538/0001-00","johon.joe@gmail.com", "John Doe");
+        final var aPartner = Partner.newPartner("John Doe","41.536.538/0001-00", "johon.joe@gmail.com");
         final var aEvent = Event.newEvent("Disney", "2021-01-01", 10, aPartner);
-        final var aCustomer = Customer.newCustomer("123.456.789-01", "jadilson.joe@gmail.com", "Jadilson Doe");
+        final var aCustomer = Customer.newCustomer("Jadilson Doe","123.456.789-01", "jadilson.joe@gmail.com");
         final var customerID = aCustomer.customerId().value();
         final var eventID = aEvent.eventId().value();
 
@@ -141,10 +141,10 @@ class SubscribeCustomerToEventUseCaseTest {
         // given
         final var expectedError = "Event sold out";
 
-        final var aPartner = Partner.newPartner("41.536.538/0001-00","johon.joe@gmail.com", "John Doe");
+        final var aPartner = Partner.newPartner("John Doe","41.536.538/0001-00", "johon.joe@gmail.com");
         final var aEvent = Event.newEvent("Disney", "2021-01-01", 1, aPartner);
-        final var aCustomer = Customer.newCustomer("123.456.789-01", "jadilson.joe@gmail.com", "Jadilson Doe");
-        final var aCustomer2 = Customer.newCustomer("123.456.789-01", "maria.joe@gmail.com", "Jadilson Doe");
+        final var aCustomer = Customer.newCustomer("Jadilson Doe","123.456.789-01", "jadilson.joe@gmail.com");
+        final var aCustomer2 = Customer.newCustomer("Jadilson Doe","123.456.789-01", "maria.joe@gmail.com");
         final var customerID = aCustomer.customerId().value();
         final var eventID = aEvent.eventId().value();
 

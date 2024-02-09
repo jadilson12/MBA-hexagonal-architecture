@@ -1,9 +1,8 @@
 package br.com.fullcycle.hexagonal.application.usecases.customer;
 
-import br.com.fullcycle.hexagonal.application.repository.InMemoryCustomerRepository;
 import br.com.fullcycle.hexagonal.application.domain.customer.Customer;
 import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
-import br.com.fullcycle.hexagonal.application.usecases.customer.CreateCustomerUseCase;
+import br.com.fullcycle.hexagonal.application.repository.InMemoryCustomerRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,7 @@ public class CreateCustomerUseCaseTest {
         final var expectedName = "John Doe";
 
         final var customerRepository = new InMemoryCustomerRepository();
-        final var createInput = new CreateCustomerUseCase.input(expectedCPF, expectedEmail, expectedName);
+        final var createInput = new CreateCustomerUseCase.input(expectedName, expectedCPF, expectedEmail);
         // when
         final var useCase = new CreateCustomerUseCase(customerRepository);
         final var output = useCase.execute(createInput);
@@ -41,11 +40,11 @@ public class CreateCustomerUseCaseTest {
         final var expectedName = "John Doe";
         final var expectedError = "Customer already exists";
 
-        final var aCustomer = Customer.newCustomer(expectedCPF, expectedEmail, expectedName);
+        final var aCustomer = Customer.newCustomer(expectedName, expectedCPF, expectedEmail);
         final var customerRepository = new InMemoryCustomerRepository();
         customerRepository.create(aCustomer);
 
-        final var createInput = new CreateCustomerUseCase.input(expectedCPF, expectedEmail, expectedName);
+        final var createInput = new CreateCustomerUseCase.input(expectedName, expectedCPF, expectedEmail);
 
         // when
         final var useCase = new CreateCustomerUseCase(customerRepository);
@@ -64,11 +63,11 @@ public class CreateCustomerUseCaseTest {
         final var expectedEmail = "johon.joe@gmail.com";
         final var expectedName = "John Doe";
         final var expectedError = "Customer already exists";
-        final var aCustomer = Customer.newCustomer(expectedCPF, expectedEmail, expectedName);
+        final var aCustomer = Customer.newCustomer(expectedName, expectedCPF, expectedEmail);
         final var customerRepository = new InMemoryCustomerRepository();
         customerRepository.create(aCustomer);
 
-        final var createCustomerInput = new CreateCustomerUseCase.input(expectedCPF, expectedEmail, expectedName);
+        final var createCustomerInput = new CreateCustomerUseCase.input(expectedName, expectedCPF, expectedEmail);
 
 
         // when

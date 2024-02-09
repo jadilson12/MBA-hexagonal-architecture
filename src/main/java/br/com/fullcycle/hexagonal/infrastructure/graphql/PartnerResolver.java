@@ -1,9 +1,10 @@
 package br.com.fullcycle.hexagonal.infrastructure.graphql;
 
+import br.com.fullcycle.hexagonal.application.repositories.PartnerRepository;
 import br.com.fullcycle.hexagonal.application.usecases.partner.CreatePartnerUseCase;
 import br.com.fullcycle.hexagonal.application.usecases.partner.GetPartnerByIDUseCase;
 import br.com.fullcycle.hexagonal.infrastructure.dtos.NewCustomerDTO;
-import br.com.fullcycle.hexagonal.infrastructure.services.PartnerService;
+
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -15,10 +16,10 @@ import java.util.Objects;
 @Controller
 public class PartnerResolver {
 
-    private final PartnerService partnerService;
+    private final PartnerRepository partnerRepository;
 
-    public PartnerResolver(final PartnerService partnerService) {
-        this.partnerService = Objects.requireNonNull(partnerService);
+    public PartnerResolver(final PartnerRepository partnerRepository) {
+        this.partnerRepository = Objects.requireNonNull(partnerRepository);
     }
 
 

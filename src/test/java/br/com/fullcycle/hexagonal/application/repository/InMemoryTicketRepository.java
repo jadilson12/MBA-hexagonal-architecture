@@ -12,10 +12,8 @@ import java.util.Optional;
 public class InMemoryTicketRepository implements TicketRepository {
     private final Map<String, Ticket> ticket;
 
-
     public InMemoryTicketRepository() {
         this.ticket = new HashMap<>();
-
     }
 
     @Override
@@ -23,13 +21,9 @@ public class InMemoryTicketRepository implements TicketRepository {
         return Optional.ofNullable(this.ticket.get(Objects.requireNonNull(ticketId).value()));
     }
 
-
-
-
     @Override
     public Ticket create(Ticket ticket) {
         this.ticket.put(ticket.ticketId().value(), ticket);
-
         return ticket;
     }
 

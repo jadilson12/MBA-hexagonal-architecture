@@ -1,11 +1,9 @@
 package br.com.fullcycle.hexagonal.application.usecases.event;
 
-import br.com.fullcycle.hexagonal.application.repository.InMemoryEventRepository;
-import br.com.fullcycle.hexagonal.application.repository.InMemoryPartnerRepository;
 import br.com.fullcycle.hexagonal.application.domain.partner.Partner;
 import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
-import br.com.fullcycle.hexagonal.application.usecases.event.CreateEventUseCase;
-
+import br.com.fullcycle.hexagonal.application.repository.InMemoryEventRepository;
+import br.com.fullcycle.hexagonal.application.repository.InMemoryPartnerRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +14,7 @@ class CreateEventUseCaseTest {
     @DisplayName("Deve criar um evento")
     public void testCreate() throws Exception {
         // given
-        final var aPartner = Partner.newPartner("41.536.538/0001-00","johon.joe@gmail.com", "John Doe");
+        final var aPartner = Partner.newPartner("John Doe","41.536.538/0001-00", "johon.joe@gmail.com");
         final var expectedDate = "2021-01-01";
         final var expectedName = "Disney on Ice";
         final var expectedTotalSpots = 100;
@@ -51,7 +49,7 @@ class CreateEventUseCaseTest {
     @DisplayName("Nào deve criar um evento quando o Partner não existir")
     public void testCreateEvent_whenPartnerDoesnotsExisted_ShouldTownError() throws Exception {
         // given
-        final var aPartner = Partner.newPartner("41.536.538/0001-00","johon.joe@gmail.com", "John Doe");
+        final var aPartner = Partner.newPartner("John Doe","41.536.538/0001-00",  "johon.joe@gmail.com");
         final var expectedDate = "2021-01-01";
         final var expectedName = "Disney on Ice";
         final var expectedTotalSpots = 100;

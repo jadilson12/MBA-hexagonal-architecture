@@ -1,4 +1,4 @@
-package br.com.fullcycle.hexagonal.infrastructure.models;
+package br.com.fullcycle.hexagonal.infrastructure.jpa.entities;
 
 import jakarta.persistence.*;
 
@@ -6,16 +6,14 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-
-import static jakarta.persistence.GenerationType.IDENTITY;
+import java.util.UUID;
 
 @Entity
 @Table(name = "events")
-public class Event {
+public class EventEntity {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+    private UUID id;
 
     private String name;
 
@@ -24,16 +22,16 @@ public class Event {
     private int totalSpots;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Partner partner;
+    private PartnerEntity partner;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
-    private Set<Ticket> tickets;
+    private Set<TicketEntity> tickets;
 
-    public Event() {
+    public EventEntity() {
         this.tickets = new HashSet<>();
     }
 
-    public Event(Long id, String name, LocalDate date, int totalSpots, Set<Ticket> tickets) {
+    public EventEntity(UUID id, String name, LocalDate date, int totalSpots, Set<TicketEntity> tickets) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -41,11 +39,11 @@ public class Event {
         this.tickets = tickets != null ? tickets : new HashSet<>();
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -73,19 +71,19 @@ public class Event {
         this.totalSpots = totalSpots;
     }
 
-    public Partner getPartner() {
+    public PartnerEntity getPartner() {
         return partner;
     }
 
-    public void setPartner(Partner partner) {
+    public void setPartner(PartnerEntity partner) {
         this.partner = partner;
     }
 
-    public Set<Ticket> getTickets() {
+    public Set<TicketEntity> getTickets() {
         return tickets;
     }
 
-    public void setTickets(Set<Ticket> tickets) {
+    public void setTickets(Set<TicketEntity> tickets) {
         this.tickets = tickets;
     }
 
@@ -93,7 +91,7 @@ public class Event {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Event event = (Event) o;
+        EventEntity event = (EventEntity) o;
         return Objects.equals(id, event.id);
     }
 
