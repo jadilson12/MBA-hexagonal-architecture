@@ -20,6 +20,7 @@ class SubscribeCustomerToEventUseCaseTest {
     public void testReserveTicket() throws Exception {
         // given
         final var expectedTicketSize = 1;
+
         final var expectedCNPJ = "41.536.538/0001-00";
         final var aCustomer = Customer.newCustomer("Jadilson Doe","123.456.789-01", "jadilson.joe@gmail.com");
         final var aPartner = Partner.newPartner("John Doe",expectedCNPJ, "johon.joe@gmail.com");

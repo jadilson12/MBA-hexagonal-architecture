@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 import java.util.Objects;
 import java.util.UUID;
 
-@Entity
+@Entity(name = "Customer")
 @Table(name = "customers")
 public class CustomerEntity {
 
@@ -21,9 +21,6 @@ public class CustomerEntity {
     private String cpf;
 
     private String email;
-
-    public CustomerEntity() {
-    }
 
     public CustomerEntity(UUID id, String name, String cpf, String email) {
         this.id = id;

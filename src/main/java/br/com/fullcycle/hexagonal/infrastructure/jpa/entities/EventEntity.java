@@ -1,14 +1,17 @@
 package br.com.fullcycle.hexagonal.infrastructure.jpa.entities;
 
+import br.com.fullcycle.hexagonal.application.domain.event.Event;
+import br.com.fullcycle.hexagonal.application.domain.event.EventTicket;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-@Entity
+@Entity(name = "Event")
 @Table(name = "events")
 public class EventEntity {
 
@@ -21,25 +24,54 @@ public class EventEntity {
 
     private int totalSpots;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private PartnerEntity partner;
+    private UUID partnerId;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
-    private Set<TicketEntity> tickets;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "event")
+    private Set<EventTicketEntity> tickets;
 
     public EventEntity() {
         this.tickets = new HashSet<>();
     }
 
-    public EventEntity(UUID id, String name, LocalDate date, int totalSpots, Set<TicketEntity> tickets) {
+    public EventEntity(UUID id, String name, LocalDate date, int totalSpots, UUID partnerId) {
+        this();
         this.id = id;
         this.name = name;
         this.date = date;
         this.totalSpots = totalSpots;
-        this.tickets = tickets != null ? tickets : new HashSet<>();
+        this.partnerId = partnerId;
     }
 
-    public UUID getId() {
+    public static EventEntity of(final Event event) {
+        final var entity = new EventEntity(
+                UUID.fromString(event.eventId().value()),
+                event.name().value(),
+                event.date(),
+                event.totalSpots(),
+                UUID.fromString(event.partnerId().value())
+        );
+
+        event.allTickets().forEach(entity::addTicket);
+     return entity;
+    }
+
+    public Event toEvent() {
+        return Event.restore(
+                this.id.toString(),
+                this.name(),
+                this.date().format(DateTimeFormatter.ISO_LOCAL_DATE),
+                this.totalSpots(),
+                this.partnerId().toString(),
+                this.tickets().stream().map(EventTicketEntity::toEventTicket).collect(Collectors.toSet()
+        ));
+    }
+
+    private void addTicket(final EventTicket ticket) {
+        this.tickets.add(EventTicketEntity.of(this, ticket));
+
+    }
+
+    public UUID id() {
         return id;
     }
 
@@ -47,56 +79,47 @@ public class EventEntity {
         this.id = id;
     }
 
-    public String getName() {
+    public String name() {
         return name;
     }
 
-    public void setName(String name) {
+    public EventEntity setName(String name) {
         this.name = name;
+        return this;
     }
 
-    public LocalDate getDate() {
+    public LocalDate date() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public EventEntity setDate(LocalDate date) {
         this.date = date;
+        return this;
     }
 
-    public int getTotalSpots() {
+    public int totalSpots() {
         return totalSpots;
     }
 
-    public void setTotalSpots(int totalSpots) {
+    public EventEntity setTotalSpots(int totalSpots) {
         this.totalSpots = totalSpots;
+        return this;
     }
 
-    public PartnerEntity getPartner() {
-        return partner;
+    public UUID partnerId() {
+        return partnerId;
     }
 
-    public void setPartner(PartnerEntity partner) {
-        this.partner = partner;
+    public EventEntity setPartnerId(UUID partnerId) {
+        this.partnerId = partnerId;
+        return this;
     }
 
-    public Set<TicketEntity> getTickets() {
+    public Set<EventTicketEntity> tickets() {
         return tickets;
     }
 
-    public void setTickets(Set<TicketEntity> tickets) {
+    public void setTickets(Set<EventTicketEntity> tickets) {
         this.tickets = tickets;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        EventEntity event = (EventEntity) o;
-        return Objects.equals(id, event.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 }

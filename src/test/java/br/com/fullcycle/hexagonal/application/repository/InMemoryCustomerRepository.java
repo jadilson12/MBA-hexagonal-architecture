@@ -39,7 +39,7 @@ public class InMemoryCustomerRepository implements CustomerRepository {
 
     @Override
     public Customer create(Customer customer) {
-        this.customers.put(customer.customerId().toString(), customer);
+        this.customers.put(customer.customerId().value(), customer);
         this.customersByCpf.put(customer.cpf().value(), customer);
         this.customersByEmail.put(customer.email().value(), customer);
         return customer;
@@ -47,9 +47,16 @@ public class InMemoryCustomerRepository implements CustomerRepository {
 
     @Override
     public Customer update(Customer customer) {
-        this.customers.put(customer.customerId().toString(), customer);
+        this.customers.put(customer.customerId().value(), customer);
         this.customersByCpf.put(customer.cpf().value(), customer);
         this.customersByEmail.put(customer.email().value(), customer);
         return customer;
+    }
+
+    @Override
+    public void deleteAll() {
+        this.customers.clear();
+        this.customersByCpf.clear();
+        this.customersByEmail.clear();
     }
 }

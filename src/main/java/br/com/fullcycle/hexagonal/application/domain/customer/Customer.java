@@ -12,18 +12,22 @@ public class Customer {
     private Name name;
     private Email email;
     private Cpf cpf;
-
-
-
-    public Customer(final CustomerId customerId, final String cpf, final String email, final String name) {
+    public Customer(final CustomerId customerId,final String name, final String cpf, final String email) {
         if (customerId == null) {
             throw new ValidationException("Invalid customerId for Customer");
         }
-
         this.customerId = customerId;
         this.setName(name);
         this.setCpf(cpf);
         this.setEmail(email);
+    }
+
+    public  static Customer newCustomer(
+            final String name,
+            final String cpf,
+            final String email
+    ) {
+        return new Customer(CustomerId.unique(),name, cpf, email);
     }
     public CustomerId customerId() {
         return customerId;
@@ -39,15 +43,6 @@ public class Customer {
 
     public Cpf cpf() {
         return cpf;
-    }
-
-    public  static Customer newCustomer(
-            final String name,
-            final String cpf,
-            final String email
-
-            ) {
-        return new Customer(CustomerId.unique(),cpf, email, name );
     }
 
     @Override

@@ -29,7 +29,7 @@ public class CustomerController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody NewCustomerDTO dto) {
         try {
-            final var output = createCustomerUseCase.execute(new CreateCustomerUseCase.input(dto.cpf(), dto.email(), dto.name()));
+            final var output = createCustomerUseCase.execute(new CreateCustomerUseCase.input(dto.name(), dto.cpf(), dto.email()));
             return ResponseEntity.created(URI.create("/customers/" + output.id())).body(output);
         } catch (ValidationException ex) {
             return ResponseEntity.unprocessableEntity().body(ex.getMessage());

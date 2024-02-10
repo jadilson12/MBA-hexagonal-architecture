@@ -13,5 +13,5 @@ public interface CustomerRepository {
     Optional<Customer> customerOfEmail(Email email);
     Customer create(Customer customer);
     Customer update(Customer customer);
-
+    void deleteAll();
 }

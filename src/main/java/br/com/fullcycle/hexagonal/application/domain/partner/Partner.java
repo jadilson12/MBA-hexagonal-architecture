@@ -13,18 +13,25 @@ public class Partner {
     private Email email;
     private Cnpj cnpj;
 
-    public Partner(final PartnerId partnerId, final String cnpj, final String email, final String name) {
-
+    public Partner(final PartnerId partnerId, final String name, final String cnpj, final String email) {
         if (partnerId == null) {
             throw new ValidationException("partnerId is required");
         }
-
         this.partnerId = partnerId;
         this.setCnpj(cnpj);
         this.setEmail(email);
         this.setName(name);
-
     }
+
+    public static Partner newPartner(
+            final String name,
+            final String cnpj,
+            final String email
+
+    ) {
+        return new Partner(PartnerId.unique(),name, cnpj, email);
+    }
+
 
     public PartnerId partnerId() {
         return partnerId;
@@ -41,14 +48,6 @@ public class Partner {
         return cnpj;
     }
 
-    public static Partner newPartner(
-            final String name,
-            final String cnpj,
-            final String email
-
-    ) {
-        return new Partner(PartnerId.unique(), cnpj, email, name);
-    }
 
     @Override
     public boolean equals(Object o) {

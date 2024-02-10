@@ -23,19 +23,22 @@ public class InMemoryEventRepository implements EventRepository {
         return Optional.ofNullable(this.event.get(Objects.requireNonNull(eventId).value()));
     }
 
-
-
     @Override
     public Event create(Event event) {
-        this.event.put(event.eventId().toString(), event);
+        this.event.put(event.eventId().value(), event);
 
         return event;
     }
 
     @Override
     public Event update(Event event) {
-        this.event.put(event.eventId().toString(), event);
+        this.event.put(event.eventId().value(), event);
 
         return event;
+    }
+
+    @Override
+    public void deleteAll() {
+        this.event.clear();
     }
 }

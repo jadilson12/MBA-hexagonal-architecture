@@ -1,10 +1,10 @@
 package br.com.fullcycle.hexagonal.application.usecases.event;
 
 import br.com.fullcycle.hexagonal.IntegrationTest;
+import br.com.fullcycle.hexagonal.application.domain.partner.Partner;
 import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
-import br.com.fullcycle.hexagonal.infrastructure.jpa.entities.PartnerEntity;
-import br.com.fullcycle.hexagonal.infrastructure.jpa.repositories.EventJpaRepository;
-import br.com.fullcycle.hexagonal.infrastructure.jpa.repositories.PartnerJpaRepository;
+import br.com.fullcycle.hexagonal.application.repositories.EventRepository;
+import br.com.fullcycle.hexagonal.application.repositories.PartnerRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,11 +16,11 @@ class CreateEventUseCaseIT extends IntegrationTest {
     @Autowired
     private CreateEventUseCase useCase;
     @Autowired
-    private PartnerJpaRepository partnerRepository;
+    private PartnerRepository partnerRepository;
     @Autowired
-    private EventJpaRepository eventRepository;
+    private EventRepository eventRepository;
     @BeforeEach
-    void tearDown() {
+    void setUp() {
         eventRepository.deleteAll();
         partnerRepository.deleteAll();
 
@@ -30,17 +30,14 @@ class CreateEventUseCaseIT extends IntegrationTest {
     @DisplayName("Deve criar um evento")
     public void testCreate() throws Exception {
         // given
-        final var aPartner = createPartner("41536538000100", "johon.joe@gmail.com", "John Doe");
+        final var aPartner = createPartner("41.536.538/0001-00", "johon.joe@gmail.com", "John Doe");
         final var expectedDate = "2021-01-01";
         final var expectedName = "Disney on Ice";
         final var expectedTotalSpots = 100;
-        final var expectedPartnerId = aPartner.getId().toString();
-
-
+        final var expectedPartnerId = aPartner.partnerId().value();
 
         final var createInput =
                 new CreateEventUseCase.Input(expectedDate, expectedName, expectedPartnerId, expectedTotalSpots);
-
 
         // when
         final var output = useCase.execute(createInput);
@@ -58,11 +55,11 @@ class CreateEventUseCaseIT extends IntegrationTest {
     @DisplayName("Nào deve criar um evento quando o Partner não existir")
     public void testCreateEvent_whenPartnerDoesnotsExisted_ShouldTownError() throws Exception {
         // given
-        final var aPartner = createPartner("41536538000100", "johon.joe@gmail.com", "John Doe");
+        final var aPartner = createPartner("41.536.538/0001-00", "johon.joe@gmail.com", "John Doe");
         final var expectedDate = "2021-01-01";
         final var expectedName = "Disney on Ice";
         final var expectedTotalSpots = 100;
-        final var expectedPartnerId = aPartner.getId().toString();
+        final var expectedPartnerId = aPartner.partnerId().value();
         final var expectedError = "Partner not found";
 
         final var createInput =
@@ -75,11 +72,7 @@ class CreateEventUseCaseIT extends IntegrationTest {
         Assertions.assertEquals(expectedError, actualException.getMessage());
     }
 
-    private PartnerEntity createPartner(final String cnpj, final String email, final String name) {
-        final var aPartner = new PartnerEntity();
-        aPartner.setCnpj(cnpj);
-        aPartner.setEmail(email);
-        aPartner.setName(name);
-        return partnerRepository.save(aPartner);
+    private Partner createPartner(final String cnpj, final String email, final String name) {
+        return partnerRepository.create(Partner.newPartner(name, cnpj, email));
     }
 }

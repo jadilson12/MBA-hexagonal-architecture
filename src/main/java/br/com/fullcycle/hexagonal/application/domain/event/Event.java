@@ -30,13 +30,45 @@ public class Event {
     private Set<EventTicket> tickets;
 
 
-    public Event(final EventId eventId, final String name, final String date, final Integer totalSpots, final PartnerId partnerId) {
-        this(eventId);
+    public Event(
+            final EventId eventId,
+            final String name,
+            final String date,
+            final Integer totalSpots,
+            final PartnerId partnerId ,
+            final Set<EventTicket> tickets
+    ) {
+        this(eventId, tickets);
         this.setName(name);
         this.setDate(date);
         this.setTotalSpots(totalSpots);
         this.setPartnerId(partnerId);
     }
+
+    public static Event newEvent(
+            final String name,
+            final String date,
+            final Integer totalSpots,
+            final Partner partner
+    ) {
+        return new Event(
+                EventId.unique(),
+                name,
+                date,
+                totalSpots,
+                partner.partnerId(),
+                null
+        );
+    }
+
+    private Event(final EventId eventId, final Set<EventTicket> tickets) {
+        if (eventId == null) {
+            throw new ValidationException("Invalid eventId for Event");
+        }
+        this.eventId = eventId;
+        this.tickets = tickets !=  null ? tickets: new HashSet<>(0);
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -51,17 +83,25 @@ public class Event {
         return Objects.hash(eventId);
     }
 
-    public static Event newEvent(final String name, final String date, final Integer totalSpots, final Partner partner) {
-        return new Event(EventId.unique(), name, date, totalSpots, partner.partnerId());
+    public static Event restore(
+            final String id,
+            final String name,
+            final String date,
+            final int totalSpots,
+            final String partnerId,
+            final Set<EventTicket> tickets
+    )  {
+        return new Event(
+                EventId.with(id),
+                name,
+                date,
+                totalSpots,
+                PartnerId.with(partnerId),
+                tickets
+        );
+
     }
 
-    private Event(final EventId eventId) {
-        if (eventId == null) {
-            throw new ValidationException("Invalid eventId for Event");
-        }
-        this.eventId = eventId;
-        this.tickets = new HashSet<>(0);
-    }
 
     public Ticket reserveTicket(final CustomerId aCustomerId) {
         this.allTickets().stream()
@@ -76,7 +116,7 @@ public class Event {
         }
 
         final var newTicker = Ticket.newTicket(aCustomerId, eventId());
-        this.allTickets().add(new EventTicket(newTicker.ticketId(), eventId(), this.allTickets().size() + ONE, aCustomerId));
+        this.allTickets().add(new EventTicket(newTicker.ticketId(), eventId(), aCustomerId, this.allTickets().size() + ONE));
 
         return newTicker;
     }
@@ -88,7 +128,7 @@ public class Event {
     }
 
     public EventId eventId() {
-        return eventId;
+        return this.eventId;
     }
 
     public Name name() {
@@ -135,6 +175,7 @@ public class Event {
         }
         this.totalSpots = totalSpots;
     }
+
 
 }
 

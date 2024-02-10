@@ -13,5 +13,5 @@ public interface PartnerRepository {
     Optional<Partner> partnerOfEmail(Email email);
     Partner create(Partner partner);
     Partner update(Partner partner);
-
+    void deleteAll();
 }

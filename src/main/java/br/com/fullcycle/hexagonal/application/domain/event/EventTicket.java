@@ -10,7 +10,7 @@ public class EventTicket {
     private  final CustomerId customerId;
     private  int ordering;
 
-    public EventTicket(final TicketId ticketId, final EventId eventId, final Integer ordering, CustomerId customerId) {
+    public EventTicket(final TicketId ticketId, final EventId eventId, CustomerId customerId, final Integer ordering) {
 
 
         if(ticketId == null) {

@@ -27,14 +27,14 @@ public class CreateCustomerUseCase extends UseCase<CreateCustomerUseCase.input, 
 
         var customer = customerRepository.create(Customer.newCustomer(input.name, input.cpf, input.email ));
 
-        return new Output(customer.customerId().value(), customer.cpf().value(), customer.email()
-                .value(), customer.name().value());
+        return new Output(customer.customerId().value(),customer.name().value(), customer.cpf().value(), customer.email()
+                .value());
     }
 
     public record input(String name, String cpf, String email) {
     }
 
-    public record Output(String id, String cpf, String email, String name) {
+    public record Output(String id, String name, String cpf, String email) {
     }
 
 }

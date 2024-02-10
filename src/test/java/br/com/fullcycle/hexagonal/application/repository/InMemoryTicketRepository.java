@@ -32,4 +32,10 @@ public class InMemoryTicketRepository implements TicketRepository {
         this.ticket.put(ticket.ticketId().value(), ticket);
         return ticket;
     }
+
+    @Override
+    public void deleteAll() {
+       this.ticket.clear();
+
+    }
 }
