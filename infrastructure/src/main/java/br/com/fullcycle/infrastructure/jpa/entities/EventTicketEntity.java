@@ -3,6 +3,7 @@ package br.com.fullcycle.infrastructure.jpa.entities;
 import br.com.fullcycle.domain.customer.CustomerId;
 import br.com.fullcycle.domain.event.EventId;
 import br.com.fullcycle.domain.event.EventTicket;
+import br.com.fullcycle.domain.event.EventTicketId;
 import br.com.fullcycle.domain.event.ticket.TicketId;
 import jakarta.persistence.*;
 
@@ -14,6 +15,7 @@ import java.util.UUID;
 public class EventTicketEntity {
 
     @Id
+    private UUID eventTicketId;
     private UUID ticketId;
 
     private UUID customerId;
@@ -27,12 +29,14 @@ public class EventTicketEntity {
     }
 
     public EventTicketEntity(
+            final UUID eventTicketId,
             final UUID ticketId,
             final UUID customerId,
             final int ordering,
             final EventEntity event
 
     ) {
+        this.eventTicketId = eventTicketId;
         this.ticketId = ticketId;
         this.customerId = customerId;
         this.ordering = ordering;
@@ -43,22 +47,33 @@ public class EventTicketEntity {
     public static EventTicketEntity of(
             final EventEntity event,
             final EventTicket ev
-            ) {
+    ) {
         return new EventTicketEntity(
-                UUID.fromString(ev.ticketId().value()),
+                UUID.fromString(ev.eventTicketId().value()),
+                ev.eventId() != null ? UUID.fromString(ev.ticketId().value()) : null,
                 UUID.fromString(ev.customerId().value()),
                 ev.ordering(),
                 event
-                );
+        );
     }
 
     public EventTicket toEventTicket() {
         return new EventTicket(
-                TicketId.with(this.ticketId.toString()),
+                EventTicketId.with(this.eventTicketId.toString()),
                 EventId.with(this.event.id().toString()),
                 CustomerId.with(this.customerId.toString()),
+                this.ticketId != null ? TicketId.with(this.ticketId.toString()) : null,
                 this.ordering
         );
+    }
+
+    public UUID eventTicketId() {
+        return eventTicketId;
+    }
+
+    public EventTicketEntity setEventTicketId(UUID eventTicketId) {
+        this.eventTicketId = eventTicketId;
+        return this;
     }
 
     public UUID ticketId() {
@@ -98,11 +113,11 @@ public class EventTicketEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EventTicketEntity that = (EventTicketEntity) o;
-        return ordering == that.ordering && Objects.equals(ticketId, that.ticketId) && Objects.equals(customerId, that.customerId) && Objects.equals(event, that.event);
+        return Objects.equals(eventTicketId, that.eventTicketId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(ticketId, customerId, ordering, event);
+        return Objects.hash(eventTicketId);
     }
 }

@@ -8,7 +8,6 @@ import br.com.fullcycle.application.partner.CreatePartnerUseCase;
 import br.com.fullcycle.application.partner.GetPartnerByIDUseCase;
 import br.com.fullcycle.domain.customer.CustomerRepository;
 import br.com.fullcycle.domain.event.EventRepository;
-import br.com.fullcycle.domain.event.ticket.TicketRepository;
 import br.com.fullcycle.domain.partner.PartnerRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,17 +19,15 @@ public class UseCaseConfig {
 
     private final CustomerRepository customerRepository;
     private final PartnerRepository partnerRepository;
-    private  final TicketRepository ticketRepository;
+
     private final EventRepository eventRepository;
     public UseCaseConfig(
             final CustomerRepository customerRepository,
             final PartnerRepository partnerRepository,
-            final TicketRepository ticketRepository,
             final EventRepository eventRepository
     ) {
         this.customerRepository = Objects.requireNonNull(customerRepository);
         this.partnerRepository = Objects.requireNonNull(partnerRepository);
-        this.ticketRepository = Objects.requireNonNull(ticketRepository);
         this.eventRepository = Objects.requireNonNull(eventRepository);
     }
     @Bean
@@ -43,7 +40,7 @@ public class UseCaseConfig {
     }
     @Bean
     public SubscribeCustomerToEventUseCase subscribeCustomerToEventUseCase() {
-        return new SubscribeCustomerToEventUseCase(eventRepository, customerRepository,ticketRepository );
+        return new SubscribeCustomerToEventUseCase(eventRepository, customerRepository );
     }
     @Bean
     public CreatePartnerUseCase createPartnerUseCase() {
